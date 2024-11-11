@@ -1,0 +1,168 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: alpine
+    spiffe.io/spiffe-id: "true"
+  name: alpine
+  namespace: ns-kernel2ethernet2kernel
+  resourceVersion: "13101"
+  uid: 189e9be4-97c6-4096-942c-15b577e3320f
+spec:
+  selector:
+      matchLabels:
+        app: alpine
+  template:
+    metadata:
+      labels:
+        app: alpine
+        "spiffe.io/spiffe-id": "true"
+    spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In
+                values:
+                - nse-kernel
+            topologyKey: kubernetes.io/hostname
+      containers:
+      - command:
+        - /bin/sh
+        - -c
+        - 'trap : TERM INT; sleep infinity & wait'
+        image: alpine:3.15.0
+        imagePullPolicy: IfNotPresent
+        name: alpine
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+          name: kube-api-access-xhn52
+          readOnly: true
+      - env:
+        - name: NSM_LOG_LEVEL
+          value: INFO
+        - name: SPIFFE_ENDPOINT_SOCKET
+          value: unix:///run/spire/sockets/agent.sock
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: metadata.name
+        - name: NSM_NETWORK_SERVICES
+          value: kernel://kernel2ethernet2kernel/nsm-1
+        - name: NSM_NAME
+          value: $(POD_NAME)-5c42d5b3-1172-47ce-9891-cac9204bd042
+        - name: NSM_REQUEST_TIMEOUT
+          value: "15s"
+        image: ghcr.io/networkservicemesh/cmd-nsc:v1.14.1-rc.4
+        imagePullPolicy: IfNotPresent
+        name: cmd-nsc
+        resources:
+          limits:
+            cpu: 200m
+            memory: 80Mi
+          requests:
+            cpu: 100m
+            memory: 40Mi
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /run/spire/sockets
+          name: spire-agent-socket
+          readOnly: true
+        - mountPath: /var/lib/networkservicemesh
+          name: nsm-socket
+          readOnly: true
+        - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+          name: kube-api-access-xhn52
+          readOnly: true
+      dnsPolicy: ClusterFirst
+      enableServiceLinks: true
+      initContainers:
+      - env:
+        - name: NSM_LOG_LEVEL
+          value: INFO
+        - name: SPIFFE_ENDPOINT_SOCKET
+          value: unix:///run/spire/sockets/agent.sock
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: metadata.name
+        - name: NSM_NETWORK_SERVICES
+          value: kernel://kernel2ethernet2kernel/nsm-1
+        - name: NSM_NAME
+          value: $(POD_NAME)-5c42d5b3-1172-47ce-9891-cac9204bd042
+        image: ghcr.io/networkservicemesh/cmd-nsc-init:v1.14.1-rc.2
+        imagePullPolicy: IfNotPresent
+        name: cmd-nsc-init
+        resources:
+          limits:
+            cpu: 200m
+            memory: 80Mi
+          requests:
+            cpu: 100m
+            memory: 40Mi
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /run/spire/sockets
+          name: spire-agent-socket
+          readOnly: true
+        - mountPath: /var/lib/networkservicemesh
+          name: nsm-socket
+          readOnly: true
+        - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+          name: kube-api-access-xhn52
+          readOnly: true
+      nodeName: kind-worker
+      preemptionPolicy: PreemptLowerPriority
+      priority: 0
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      serviceAccount: default
+      serviceAccountName: default
+      terminationGracePeriodSeconds: 30
+      tolerations:
+      - effect: NoExecute
+        key: node.kubernetes.io/not-ready
+        operator: Exists
+        tolerationSeconds: 300
+      - effect: NoExecute
+        key: node.kubernetes.io/unreachable
+        operator: Exists
+        tolerationSeconds: 300
+      volumes:
+      - name: kube-api-access-xhn52
+        projected:
+          defaultMode: 420
+          sources:
+          - serviceAccountToken:
+              expirationSeconds: 3607
+              path: token
+          - configMap:
+              items:
+              - key: ca.crt
+                path: ca.crt
+              name: kube-root-ca.crt
+          - downwardAPI:
+              items:
+              - fieldRef:
+                  apiVersion: v1
+                  fieldPath: metadata.namespace
+                path: namespace
+      - hostPath:
+          path: /run/spire/sockets
+          type: Directory
+        name: spire-agent-socket
+      - hostPath:
+          path: /var/lib/networkservicemesh
+          type: Directory
+        name: nsm-socket

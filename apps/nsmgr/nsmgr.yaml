@@ -32,6 +32,8 @@ spec:
                   fieldPath: metadata.name
             - name: NSM_LOG_LEVEL
               value: INFO
+            - name: NSM_DIAL_TIMEOUT
+              value: "3s"
             - name: NSM_PPROF_ENABLED
               value: "false"
             - name: NSM_PPROF_LISTEN_ON
@@ -62,9 +64,6 @@ spec:
             requests:
               memory: 100Mi
               cpu: 200m
-            limits:
-              memory: 200Mi
-              cpu: 400m
           readinessProbe:
             exec:
               command: ["/bin/grpc-health-probe", "-spiffe", "-addr=unix:///var/lib/networkservicemesh/nsm.io.sock"]

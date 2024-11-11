@@ -2,19 +2,19 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: alpine-2
+  name: alpine-4
   labels:
-    app: alpine-2
+    app: alpine-4
   annotations:
-    networkservicemesh.io: kernel://ipam-policies/nsm-2,kernel://ipam-policies-2/nsm-2
+    networkservicemesh.io: kernel://ipam-policies/nsm-4,kernel://ipam-policies-2/nsm-4
 spec:
   containers:
-  - name: alpine-2
+  - name: alpine-4
     image: alpine:3.15.0
     imagePullPolicy: IfNotPresent
     env:
       - name: NSM_LOG_LEVEL
-        value: INFO
+        value: TRACE
     # simple `sleep` command would work
     # but we need `trap` to be able to delete pods quckly
     command: ["/bin/sh", "-c", "trap : TERM INT; sleep infinity & wait"]

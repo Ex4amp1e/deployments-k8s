@@ -41,6 +41,8 @@ spec:
               value: "false"
             - name: NSM_PPROF_LISTEN_ON
               value: "localhost:6060"
+            - name: NSM_DIAL_TIMEOUT
+              value: "3s"
           volumeMounts:
             - name: spire-agent-socket
               mountPath: /run/spire/sockets
@@ -59,9 +61,6 @@ spec:
             requests:
               memory: 350Mi
               cpu: 150m
-            limits:
-              memory: 500Mi
-              cpu: 525m
           readinessProbe:
             exec:
               command: ["/bin/grpc-health-probe", "-spiffe", "-addr=unix:///listen.on.sock"]

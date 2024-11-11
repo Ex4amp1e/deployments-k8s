@@ -6,7 +6,7 @@ metadata:
   labels:
     app: alpine-1
   annotations:
-    networkservicemesh.io: kernel://ipam-policies/nsm-1
+    networkservicemesh.io: kernel://ipam-policies/nsm-1,kernel://ipam-policies-2/nsm-1
 spec:
   containers:
   - name: alpine-1

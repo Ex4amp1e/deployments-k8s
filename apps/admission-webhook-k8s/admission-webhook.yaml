@@ -47,13 +47,11 @@ spec:
             - name: NSM_LABELS
               value: spiffe.io/spiffe-id:true
             - name: NSM_ENVS
-              value: NSM_LOG_LEVEL=INFO
+              value: NSM_LOG_LEVEL=INFO,NSM_LIVENESS_CHECK_ENABLED=false
             - name: NSM_SIDECAR_LIMITS_MEMORY
               value: 80Mi
             - name: NSM_SIDECAR_REQUESTS_MEMORY
               value: 40Mi
-            - name: NSM_SIDECAR_LIMITS_CPU
-              value: 200m
             - name: NSM_SIDECAR_REQUESTS_CPU
               value: 100m
           volumeMounts:
