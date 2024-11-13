@@ -25,13 +25,13 @@ spec:
         - name: NSM_CONNECT_TO
           value: unix:///var/lib/networkservicemesh/nsm.io.sock
         - name: NSM_SERVICE_NAMES
-          value: "ipam-policies"
+          value: "ipam-policies-2"
         - name: NSM_REGISTER_SERVICE
           value: "false"
         - name: NSM_IPAM_POLICY
           value: strict
         - name: NSM_CIDR_PREFIX
-          value: 172.16.2.0/29
+          value: 2001:db8::/116
       volumeMounts:
         - name: spire-agent-socket
           mountPath: /run/spire/sockets

@@ -7,6 +7,8 @@ namespace: ns-ipam-policies
 resources:
 - ns-ipam-policies.yaml
 - netsvc.yaml
+- netsvc2.yaml
 - client1.yaml
 - client2.yaml
 - first-nse.yaml
+- second-nse.yaml
