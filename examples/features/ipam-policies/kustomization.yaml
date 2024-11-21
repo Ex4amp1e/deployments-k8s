@@ -10,5 +10,7 @@ resources:
 - netsvc2.yaml
 - client1.yaml
 - client2.yaml
+- client3.yaml
+- client4.yaml
 - first-nse.yaml
 - second-nse.yaml
