@@ -31,7 +31,7 @@ spec:
                 fieldRef:
                   fieldPath: metadata.name
             - name: NSM_LOG_LEVEL
-              value: INFO
+              value: TRACE
             - name: NSM_DIAL_TIMEOUT
               value: "3s"
             - name: NSM_PPROF_ENABLED

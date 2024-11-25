@@ -19,7 +19,7 @@ spec:
       hostNetwork: true
       dnsPolicy: ClusterFirstWithHostNet
       containers:
-        - image: ghcr.io/networkservicemesh/cmd-forwarder-vpp:v1.14.0
+        - image: ghcr.io/networkservicemesh/cmd-forwarder-vpp:v1.14.1
           imagePullPolicy: IfNotPresent
           name: forwarder-vpp
           securityContext:
@@ -28,7 +28,7 @@ spec:
             - name: SPIFFE_ENDPOINT_SOCKET
               value: unix:///run/spire/sockets/agent.sock
             - name: NSM_LOG_LEVEL
-              value: INFO
+              value: TRACE
             - name: NSM_CONNECT_TO
               value: unix:///var/lib/networkservicemesh/nsm.io.sock
             - name: NSM_LISTEN_ON

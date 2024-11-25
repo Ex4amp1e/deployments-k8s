@@ -6,7 +6,7 @@ metadata:
   labels:
     app: alpine-3
   annotations:
-    networkservicemesh.io: kernel://ipam-policies/nsm-3,kernel://ipam-policies-2/nsm-3
+    networkservicemesh.io: kernel://ipam-policies/nsm-ipv4-3,kernel://ipam-policies-2/nsm-ipv6-3
 spec:
   containers:
   - name: alpine-3
